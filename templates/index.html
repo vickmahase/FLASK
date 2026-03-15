@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emotion Detector</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 { color: #333; }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            resize: none;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #0056b3; }
+        #system_response {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #e9ecef;
+            min-height: 50px;
+            color: #495057;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Emotion Detector</h1>
+    <p>Enter the text you want to analyze:</p>
+    <textarea id="textToAnalyze" rows="4" placeholder="Type something..."></textarea>
+    <br>
+    <button onclick="runSentimentAnalysis()">Run Analysis</button>
+    <div id="system_response"></div>
+</div>
+
+<script>
+    let runSentimentAnalysis = () => {
+        let textToAnalyze = document.getElementById("textToAnalyze").value;
+        let responseDiv = document.getElementById("system_response");
+
+        if (!textToAnalyze) {
+            responseDiv.innerHTML = "Please enter some text.";
+            return;
+        }
+
+        responseDiv.innerHTML = "Analyzing...";
+
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                responseDiv.innerHTML = this.responseText;
+            } else if (this.readyState == 4) {
+                responseDiv.innerHTML = "Error processing request.";
+            }
+        };
+        xhttp.open("GET", "/emotionDetector?textToAnalyze=" + encodeURIComponent(textToAnalyze), true);
+        xhttp.send();
+    }
+</script>
+
+</body>
+</html>
